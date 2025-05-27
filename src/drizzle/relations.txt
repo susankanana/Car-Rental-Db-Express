@@ -1,0 +1,38 @@
+ Relationships
+1. CustomerTable (1) => (M) ReservationTable
+A customer can make many reservations.
+
+
+
+2. CustomerTable (1) => (M) BookingsTable
+A customer can create multiple bookings.
+
+
+
+3. BookingsTable (1) => (1) PaymentTable
+One booking has one payment.
+
+
+
+4. CarTable (1) => (M) ReservationTable
+A car can be reserved multiple times.
+
+
+
+5. CarTable (1) => (M) BookingsTable
+A car can be booked many times.
+
+
+
+6. CarTable (1) => (M) MaintenanceTable
+A car can have many maintenance records.
+
+
+
+7. CarTable (1) => (M) InsuranceTable
+A car can have multiple insurance entries (if policies renew).
+
+
+
+8. LocationTable (1) => (M) CarTable
+A location can have multiple cars assigned.

@@ -1,0 +1,277 @@
+### Test Route
+GET http://localhost:8081
+
+###CUSTOMER TABLE
+
+### Create a Customer
+POST http://localhost:8081/auth/register
+Content-Type: application/json
+
+{
+    "firstName": "Grace",
+    "lastName": "Otieno",
+    "email": "grace.otieno22@yahoo.com",
+    "phoneNumber": "0799887765",
+    "address": "Kisumu CBD",
+    "password": "graceSecure@2024"
+  }
+### Get All Customers
+GET http://localhost:8081/customers
+
+### Get a Customer by ID
+GET http://localhost:8081/customer/3
+
+### Update a Customer
+PUT http://localhost:8081/customer/3
+Content-Type: application/json
+
+{
+    "customerID": 3,
+    "firstName": "Grace",
+    "lastName": "Otieno",
+    "email": "grace.otieno22@yahoo.com",
+    "phoneNumber": "0799887765",
+    "address": "Kisumu Ugoya",
+    "password": "3345"
+}
+
+### Delete a Customer
+DELETE http://localhost:8081/customer/4
+
+### LOCATION TABLE 
+
+### Create a Location
+POST http://localhost:8081/location/register
+Content-Type: application/json
+
+{
+    "locationName": "Kitale Point",
+    "address": "Mak Asembo Road, Kitale",
+    "contactNumber": "0788990011"
+}
+
+### Get All Locations
+GET http://localhost:8081/locations
+
+### Get a Location by ID
+GET http://localhost:8081/location/2
+
+### Update a Location
+PUT http://localhost:8081/location/1
+Content-Type: application/json
+
+{
+  "locationName": "Nairobi HQ",
+  "address": "Westlands, Nairobi",
+  "contactNumber": "0700998877"
+}
+
+### Delete a Location
+DELETE http://localhost:8081/location/8
+
+### CAR TABLE
+
+### Create a Car
+POST http://localhost:8081/car/register
+Content-Type: application/json
+
+{
+  "carModel": "Toyota Vitz",
+  "year": "2017-02-12",
+  "color": "Grey",
+  "rentalRate": "2800.00",
+  "availability": true,
+  "locationID": 4
+}
+### Get All Cars
+GET http://localhost:8081/cars
+
+### Get a Car by ID
+GET http://localhost:8081/car/2
+
+### Update a Car
+PUT http://localhost:8081/car/2
+Content-Type: application/json
+
+{
+  "carModel": "Mazda Demio",
+  "year": "2019-03-15",
+  "color": "Pink",
+  "rentalRate": "3000.00",
+  "availability": true,
+  "locationID": 1
+}
+
+### Delete a Car
+DELETE http://localhost:8081/car/2
+
+### RESERVATION TABLE
+
+### Create a Reservation
+POST http://localhost:8081/reservation/register
+Content-Type: application/json
+
+{
+  "customerID": 7,
+  "carID": 6,
+  "reservationDate": "2025-05-12",
+  "pickupDate": "2025-05-13",
+  "returnDate": "2025-05-18"
+}
+
+### Get All Reservations
+GET http://localhost:8081/reservations
+
+### Get a Reservation by ID
+GET http://localhost:8081/reservation/2
+
+### Update a Reservation
+PUT http://localhost:8081/reservation/2
+Content-Type: application/json
+
+{
+  "customerID": 1,
+  "carID": 1,
+  "reservationDate": "2025-05-01",
+  "pickupDate": "2025-05-04",
+  "returnDate": "2025-05-08"
+}
+
+### Delete a Reservation
+DELETE http://localhost:8081/reservation/3
+
+### BOOKINGS TABLE
+
+### Create a Booking
+POST http://localhost:8081/booking/register
+Content-Type: application/json
+
+{
+  "carID": 3,
+  "customerID": 7,
+  "rentalStartDate": "2025-06-03",
+  "rentalEndDate": "2025-06-07",
+  "totalAmount": "16000.00"
+}
+
+
+### Get All Bookings
+GET http://localhost:8081/bookings
+
+### Get a Booking by ID
+GET http://localhost:8081/booking/11
+
+### Update a Booking
+PUT http://localhost:8081/booking/1
+Content-Type: application/json
+
+{
+  "carID": 2,
+  "customerID": 2,
+  "rentalStartDate": "2025-06-01",
+  "rentalEndDate": "2025-06-06",
+  "totalAmount": "18000.00"
+}
+
+### Delete a Booking
+DELETE http://localhost:8081/booking/1
+
+### PAYMENT TABLE
+
+### Create a Payment
+POST http://localhost:8081/payment/register
+Content-Type: application/json
+
+{
+  "bookingID": 11,
+  "paymentDate": "2025-06-01",
+  "amount": "18000.00",
+  "paymentMethod": "Mpesa"
+}
+
+### Get All Payments
+GET http://localhost:8081/payments
+
+### Get a Payment by ID
+GET http://localhost:8081/payment/1
+
+### Update a Payment
+PUT http://localhost:8081/payment/11
+Content-Type: application/json
+
+{
+  "bookingID": 7,
+  "paymentDate": "2025-06-08",
+  "amount": "28000.00",
+  "paymentMethod": "Bank Transfer"
+}
+
+### Delete a Payment
+DELETE http://localhost:8081/payment/1
+
+### MAINTENANCE TABLE
+
+### Create a Maintenance Record
+POST http://localhost:8081/maintenance/register
+Content-Type: application/json
+
+{
+  "carID": 6,
+  "maintenanceDate": "2025-05-22",
+  "description": "Transmission check and cleaning",
+  "cost": "5100.00"
+}
+
+### Get All Maintenance Records
+GET http://localhost:8081/maintenances
+
+### Get a Maintenance Record by ID
+GET http://localhost:8081/maintenance/5
+
+### Update a Maintenance Record
+PUT http://localhost:8081/maintenance/2
+Content-Type: application/json
+
+{
+  "carID": 1,
+  "maintenanceDate": "2025-05-11",
+  "description": "Full service",
+  "cost": "5000.00"
+}
+
+### Delete a Maintenance Record
+DELETE http://localhost:8081/maintenance/2
+
+### INSURANCE TABLE
+
+### Create an Insurance Record
+POST http://localhost:8081/insurance/register
+Content-Type: application/json
+
+{
+  "carID": 6,
+  "insuranceProvider": "Heritage Insurance",
+  "policyNumber": "HER-2025-MNO678",
+  "startDate": "2025-06-01",
+  "endDate": "2026-05-31"
+}
+### Get All Insurance Records
+GET http://localhost:8081/insurances
+
+### Get an Insurance Record by ID
+GET http://localhost:8081/insurance/1
+
+### Update an Insurance Record
+PUT http://localhost:8081/insurance/1
+Content-Type: application/json
+
+{
+  "carID": 1,
+  "insuranceProvider": "Jubilee Insurance",
+  "policyNumber": "JUB-2025-456",
+  "startDate": "2025-01-01",
+  "endDate": "2025-12-31"
+}
+
+### Delete an Insurance Record
+DELETE http://localhost:8081/insurance/1
