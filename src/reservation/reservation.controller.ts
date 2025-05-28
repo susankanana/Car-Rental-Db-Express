@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import {createReservationService,getReservationService,getReservationByIdService,updateReservationService,deleteReservationService,} from "./reservation.service";
+import {createReservationService,getReservationService,getReservationByIdService,getReservationsByCustomerIdService,updateReservationService,deleteReservationService,} from "./reservation.service";
 
 export const createReservationController = async (req: Request, res: Response) => {
   try {
@@ -32,6 +32,19 @@ export const getReservationByIdController = async (req: Request, res: Response) 
     const reservation = await getReservationByIdService(id);
     if (!reservation) return res.status(404).json({ message: "Reservation not found" });
     return res.status(200).json({ data: reservation });
+  } catch (error: any) {
+    return res.status(500).json({ error: error.message });
+  }
+};
+
+export const getReservationsByCustomerIdController = async (req: Request, res: Response) => {
+  try {
+    const customerID = parseInt(req.params.customerID); 
+    if (isNaN(customerID)) return res.status(400).json({ message: "Invalid ID" });
+
+    const reservations = await getReservationsByCustomerIdService(customerID);
+    if (!reservations) return res.status(404).json({ message: "Reservation not found" });
+    return res.status(200).json({ data: reservations });
   } catch (error: any) {
     return res.status(500).json({ error: error.message });
   }

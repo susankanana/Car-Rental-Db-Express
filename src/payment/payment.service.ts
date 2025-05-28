@@ -19,6 +19,13 @@ export const getPaymentByIdService = async (id: number) => {
   return payment;
 };
 
+export const getPaymentsByBookingIdService = async (bookingId: number) => {
+  const payments = await db.query.ReservationTable.findMany({
+    where: eq(PaymentTable.bookingID, bookingId),
+  });
+  return payments;
+};
+
 export const updatePaymentService = async (id: number, payment: TIPayment) => {
   await db.update(PaymentTable).set(payment).where(eq(PaymentTable.paymentID, id)).returning();
   return "Payment updated successfully";

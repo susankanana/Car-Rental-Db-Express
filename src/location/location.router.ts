@@ -1,9 +1,11 @@
 import { Express } from "express";
 import {registerLocationController,getLocationController,getLocationByIdController,updateLocationController,deleteLocationController} from "./location.controller";
+import { adminRoleAuth, bothRoleAuth, userRoleAuth, } from '../middleware/bearerAuth';
 
 const location = (app: Express) => {
     // register location route
     app.route("/location/register").post(
+         adminRoleAuth,
         async (req, res, next) => {
             try {
                 await registerLocationController(req, res);
@@ -15,6 +17,7 @@ const location = (app: Express) => {
 
     // get all locations route
     app.route('/locations').get(
+        bothRoleAuth,
         async (req, res, next) => {
             try {
                 await getLocationController(req, res);
@@ -26,6 +29,7 @@ const location = (app: Express) => {
 
     // get location by id route
     app.route('/location/:id').get(
+        adminRoleAuth,
         async (req, res, next) => {
             try {
                 await getLocationByIdController(req, res);
@@ -37,6 +41,7 @@ const location = (app: Express) => {
 
     // update location by id route
     app.route('/location/:id').put(
+        adminRoleAuth,
         async (req, res, next) => {
             try {
                 await updateLocationController(req, res);
@@ -48,6 +53,7 @@ const location = (app: Express) => {
 
     // delete location by id route
     app.route('/location/:id').delete(
+        adminRoleAuth,
         async (req, res, next) => {
             try {
                 await deleteLocationController(req, res);

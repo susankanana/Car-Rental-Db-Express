@@ -3,7 +3,7 @@ GET http://localhost:8081
 
 ###CUSTOMER TABLE
 
-### Create a Customer
+### Register a Customer
 POST http://localhost:8081/auth/register
 Content-Type: application/json
 
@@ -13,6 +13,17 @@ Content-Type: application/json
     "email": "grace.otieno22@yahoo.com",
     "phoneNumber": "0799887765",
     "address": "Kisumu CBD",
+    "password": "graceSecure@2024"
+  }
+
+### Login a Customer
+POST http://localhost:8081/auth/login
+Content-Type: application/json
+
+{
+    "firstName": "Grace",
+    "lastName": "Otieno",
+    "email": "grace.otieno22@yahoo.com",
     "password": "graceSecure@2024"
   }
 ### Get All Customers
@@ -36,7 +47,7 @@ Content-Type: application/json
 }
 
 ### Delete a Customer
-DELETE http://localhost:8081/customer/4
+DELETE http://localhost:8081/customer/8
 
 ### LOCATION TABLE 
 
@@ -57,15 +68,14 @@ GET http://localhost:8081/locations
 GET http://localhost:8081/location/2
 
 ### Update a Location
-PUT http://localhost:8081/location/1
+PUT http://localhost:8081/location/9
 Content-Type: application/json
 
 {
-  "locationName": "Nairobi HQ",
-  "address": "Westlands, Nairobi",
-  "contactNumber": "0700998877"
+    "locationName": "Kitale ",
+    "address": "Mak Asembo Road, Kitale",
+    "contactNumber": "0788991111"
 }
-
 ### Delete a Location
 DELETE http://localhost:8081/location/8
 
@@ -122,6 +132,9 @@ Content-Type: application/json
 ### Get All Reservations
 GET http://localhost:8081/reservations
 
+### Get All Customer Reservations
+GET http://localhost:8081/reservations/customer/5
+
 ### Get a Reservation by ID
 GET http://localhost:8081/reservation/2
 
@@ -157,6 +170,10 @@ Content-Type: application/json
 
 ### Get All Bookings
 GET http://localhost:8081/bookings
+
+### Get All Customer Bookings
+GET http://localhost:8081/bookings/customer/5
+
 
 ### Get a Booking by ID
 GET http://localhost:8081/booking/11

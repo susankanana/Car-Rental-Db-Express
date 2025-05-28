@@ -1,5 +1,5 @@
 import express from 'express';
-import user from './auth/auth.router';
+import customer from './auth/auth.router';
 import location from './location/location.router';
 import car from './car/car.router';
 import booking from './booking/booking.router';
@@ -13,7 +13,7 @@ const app = express();
 app.use(express.json()); //used to parse JSON bodies
 
 // routes
-user(app);
+customer(app);
 location(app);
 car(app);
 booking(app);

@@ -15,6 +15,13 @@
       "when": 1748353231650,
       "tag": "0001_chilly_master_mold",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1748443952805,
+      "tag": "0002_fat_lester",
+      "breakpoints": true
     }
   ]
 }

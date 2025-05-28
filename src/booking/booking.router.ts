@@ -1,8 +1,10 @@
 import { Express } from "express";
-import {createBookingController, getBookingController, getBookingByIdController, updateBookingController, deleteBookingController,} from "./booking.controller";
+import {createBookingController, getBookingController, getBookingByIdController,getBookingsByCustomerIdController, updateBookingController, deleteBookingController,} from "./booking.controller";
+import { adminRoleAuth, bothRoleAuth, userRoleAuth, } from '../middleware/bearerAuth';
 
 const booking = (app: Express) => {
   app.route("/booking/register").post(
+    userRoleAuth,
     async (req, res, next) => {
       try {
         await createBookingController(req, res);
@@ -13,6 +15,7 @@ const booking = (app: Express) => {
   );
 
   app.route("/bookings").get(
+    adminRoleAuth,
     async (req, res, next) => {
       try {
         await getBookingController(req, res);
@@ -23,6 +26,7 @@ const booking = (app: Express) => {
   );
 
   app.route("/booking/:id").get(
+    adminRoleAuth,
     async (req, res, next) => {
       try {
         await getBookingByIdController(req, res);
@@ -32,7 +36,19 @@ const booking = (app: Express) => {
     }
   );
 
+  app.route("/bookings/customer/:customerID").get(
+    userRoleAuth,
+      async (req, res, next) => {
+        try {
+          await getBookingsByCustomerIdController(req, res);
+        } catch (error: any) {
+          next(error);
+        }
+      }
+    );
+
   app.route("/booking/:id").put(
+    bothRoleAuth,
     async (req, res, next) => {
       try {
         await updateBookingController(req, res);
@@ -43,6 +59,7 @@ const booking = (app: Express) => {
   );
 
   app.route("/booking/:id").delete(
+    adminRoleAuth,
     async (req, res, next) => {
       try {
         await deleteBookingController(req, res);
