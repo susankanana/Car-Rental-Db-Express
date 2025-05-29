@@ -22,6 +22,13 @@
       "when": 1748443952805,
       "tag": "0002_fat_lester",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1748523212135,
+      "tag": "0003_smiling_albert_cleary",
+      "breakpoints": true
     }
   ]
 }

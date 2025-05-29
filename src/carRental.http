@@ -8,14 +8,21 @@ POST http://localhost:8081/auth/register
 Content-Type: application/json
 
 {
-    "firstName": "Grace",
-    "lastName": "Otieno",
-    "email": "grace.otieno22@yahoo.com",
+    "firstName": "Dennis",
+    "lastName": "Kizito",
+    "email": "dkwanjiru057@gmail.com",
     "phoneNumber": "0799887765",
-    "address": "Kisumu CBD",
-    "password": "graceSecure@2024"
+    "address": "Nyeri CBD",
+    "password": "pass123"
   }
+### Verify a Customer
+POST http://localhost:8081/auth/verify
+Content-Type: application/json
 
+{
+  "email": "suzzannekans@gmail.com",
+  "code": "337368"
+}
 ### Login a Customer
 POST http://localhost:8081/auth/login
 Content-Type: application/json

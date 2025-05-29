@@ -9,6 +9,12 @@ export const createCustomerService = async (user: TICustomer) => {
     return "Customer added successfully";
 }
 
+export const verifyCustomerService = async (email: string) => {
+    await db.update(CustomerTable)
+        .set({ isVerified: true, verificationCode: null })
+        .where(sql`${CustomerTable.email} = ${email}`);
+}
+
 export const customerLoginService = async (customer: TSCustomer) => {
     const { email } = customer; //extracts email property from customer
 
@@ -37,6 +43,12 @@ export const getCustomerByIdService = async (id: number) => {
     })
     return customer;
 }
+//get customer by email
+export const getCustomerByEmailService = async (email: string) => {
+    return await db.query.CustomerTable.findFirst({
+        where: sql`${CustomerTable.email} = ${email}`
+    });
+}; 
 
 // update customer by id
 export const updateCustomerService = async (id: number, customer: TICustomer) => {

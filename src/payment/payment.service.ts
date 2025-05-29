@@ -20,7 +20,7 @@ export const getPaymentByIdService = async (id: number) => {
 };
 
 export const getPaymentsByBookingIdService = async (bookingId: number) => {
-  const payments = await db.query.ReservationTable.findMany({
+  const payments = await db.query.PaymentTable.findMany({
     where: eq(PaymentTable.bookingID, bookingId),
   });
   return payments;
