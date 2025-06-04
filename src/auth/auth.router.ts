@@ -1,5 +1,5 @@
 import { Express } from "express";
-import { registerCustomerController,verifyCustomerController,loginCustomerController, getCustomerController, getCustomerByIdController, updateCustomerController, deleteCustomerController } from "./auth.controller";
+import { registerCustomerController,verifyCustomerController,loginCustomerController,getCustomerBookingsAndPaymentsController,getAllCustomersBookingsAndPaymentsController, getCustomerController, getCustomerByIdController, updateCustomerController, deleteCustomerController } from "./auth.controller";
 
 const customer = (app: Express) => {
     // register user route
@@ -32,7 +32,25 @@ const customer = (app: Express) => {
             }
         }
     )
+    app.route('/customer/bookings-payments/:id').get(
+        async (req, res, next) => {
+            try {
+                await getCustomerBookingsAndPaymentsController(req, res);
+            } catch (error: any) {
+                next(error);
+            }
+        }
+    )
 
+    app.route('/customers/bookings-payments').get(
+        async (req, res, next) => {
+            try {
+                await getAllCustomersBookingsAndPaymentsController(req, res);
+            } catch (error: any) {
+                next(error);
+            }
+        }
+    )
     // get all customers route
     app.route('/customers').get(
         async (req, res, next) => {

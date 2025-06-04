@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs';
 import { Request, Response } from 'express';
-import { createCustomerService,verifyCustomerService,customerLoginService,getCustomerService, getCustomerByIdService,getCustomerByEmailService, updateCustomerService, deleteCustomerService } from './auth.service';
+import { createCustomerService,verifyCustomerService,customerLoginService,getCustomerWithBookingsAndPaymentsService,getAllCustomersWithBookingsAndPaymentsService,getCustomerService, getCustomerByIdService,getCustomerByEmailService, updateCustomerService, deleteCustomerService } from './auth.service';
 import jwt from 'jsonwebtoken';
 import { sendEmail } from "../mailer/mailer";
 
@@ -150,6 +150,41 @@ export const loginCustomerController = async (req: Request, res: Response) => {
         return res.status(500).json({ error: error.message });
     }
 }
+
+export const getCustomerBookingsAndPaymentsController = async (req: Request, res: Response) => {
+    try {
+        const id = parseInt(req.params.id);
+        if (isNaN(id)) {
+            return res.status(400).json({ message: "Invalid customer ID provided." });
+        }
+
+        const customerData = await getCustomerWithBookingsAndPaymentsService(id);
+
+        if (!customerData) {
+            return res.status(404).json({ message: "Customer not found." });
+        }
+
+        return res.status(200).json({ data: customerData });
+    } catch (error: any) {
+        console.error("Error fetching customer with bookings and payments by ID:", error);
+        return res.status(500).json({ error: error.message });
+    }
+}
+
+export const getAllCustomersBookingsAndPaymentsController = async (req: Request, res: Response) => {
+    try {
+        const customersData = await getAllCustomersWithBookingsAndPaymentsService();
+
+        if (!customersData || customersData.length === 0) {
+            return res.status(404).json({ message: "No customers with bookings and payments found." });
+        }
+
+        return res.status(200).json({ data: customersData });
+    } catch (error: any) {
+        console.error("Error fetching all customers with bookings and payments:", error);
+        return res.status(500).json({ error: error.message });
+    }
+}
 // get all customer controller
 export const getCustomerController = async (req: Request, res: Response) => {
     try {
@@ -164,7 +199,7 @@ export const getCustomerController = async (req: Request, res: Response) => {
     }
 }
 
-// get todo by id controller
+// get customer by id controller
 export const getCustomerByIdController = async (req: Request, res: Response) => {
     try {
         const id = parseInt(req.params.id);
