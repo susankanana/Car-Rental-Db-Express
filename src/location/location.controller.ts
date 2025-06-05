@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs';
 import { Request, Response } from 'express';
-import { createLocationService,getLocationService, getLocationByIdService, updateLocationService, deleteLocationService } from './location.service';
+import { createLocationService,getLocationService, getLocationByIdService,getLocationWithCarsService, updateLocationService, deleteLocationService } from './location.service';
 
 // Create location controller
 export const registerLocationController = async (req: Request, res: Response) => {
@@ -47,6 +47,26 @@ export const getLocationByIdController = async (req: Request, res: Response) => 
   }
 };
 
+export const getLocationWithCarsController = async (req: Request, res: Response) => {
+    try {
+        const id = Number(req.params.id);
+
+        if (isNaN(id)) {
+            return res.status(400).json({ message: "Invalid location ID" });
+        }
+
+        const location = await getLocationWithCarsService(id);
+
+        if (!location) {
+            return res.status(404).json({ message: "Location not found" });
+        }
+
+        res.status(200).json(location);
+    } catch (error) {
+        console.error("Error fetching location with cars:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+}
 // Update location by ID controller
 export const updateLocationController = async (req: Request, res: Response) => {
   try {

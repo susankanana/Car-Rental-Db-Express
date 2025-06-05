@@ -1,5 +1,5 @@
 import { Express } from "express";
-import { createCarController, getCarController, getCarByIdController, updateCarController, deleteCarController } from "./car.controller";
+import { createCarController, getCarController, getCarByIdController,getCarWithBookingsController, updateCarController, deleteCarController } from "./car.controller";
 //import { isAuthenticated } from "../middleware/bearerAuth";
 import { adminRoleAuth, bothRoleAuth, userRoleAuth, } from '../middleware/bearerAuth';
 
@@ -32,6 +32,17 @@ const car = (app: Express) => {
     async (req, res, next) => {
       try {
         await getCarByIdController(req, res);
+      } catch (error: any) {
+        next(error);
+      }
+    }
+  );
+
+  app.route("/car-bookings/:id").get(
+      adminRoleAuth,
+    async (req, res, next) => {
+      try {
+        await getCarWithBookingsController(req, res);
       } catch (error: any) {
         next(error);
       }

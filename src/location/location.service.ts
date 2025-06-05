@@ -22,6 +22,30 @@ export const getLocationByIdService = async (id: number) => {
   return location;
 };
 
+//Get location with cars
+export const getLocationWithCarsService = async (id: number) => {
+    return await db.query.LocationTable.findFirst({
+        where: eq(LocationTable.locationID, id),
+        columns: {
+          locationName: true,
+          address: true,
+          contactNumber: true
+        },
+        with: {
+    cars: {
+        columns: {
+            carID: true,
+            carModel: true,
+            color: true,
+            rentalRate: true,
+            availability: true
+        }
+    }
+  }
+  })
+  }
+
+
 // Update Location
 export const updateLocationService = async (id: number, location: TILocation) => {
     await db.update(LocationTable).set(location).where(eq(LocationTable.locationID, id)).returning();

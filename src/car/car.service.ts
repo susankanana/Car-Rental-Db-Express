@@ -19,6 +19,24 @@ export const getCarByIdService = async (id: number) => {
   });
   return car;
 };
+export const getCarWithBookingsService = async (carID: number) => {
+    return await db.query.CarTable.findFirst({
+        where: eq(CarTable.carID, carID), 
+        columns : {
+         carModel: true
+        },
+        with: {
+            bookings: {
+                columns: {
+                    bookingID: true,
+                    rentalStartDate: true,
+                    rentalEndDate: true,
+                    totalAmount: true
+                }
+            }
+        }
+    });
+};
 
 export const updateCarService = async (id: number, car: TICar) => {
   await db.update(CarTable).set(car).where(eq(CarTable.carID, id)).returning();

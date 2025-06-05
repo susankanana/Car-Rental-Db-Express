@@ -1,5 +1,5 @@
 import { Express } from "express";
-import {registerLocationController,getLocationController,getLocationByIdController,updateLocationController,deleteLocationController} from "./location.controller";
+import {registerLocationController,getLocationController,getLocationByIdController,getLocationWithCarsController,updateLocationController,deleteLocationController} from "./location.controller";
 import { adminRoleAuth, bothRoleAuth, userRoleAuth, } from '../middleware/bearerAuth';
 
 const location = (app: Express) => {
@@ -33,6 +33,18 @@ const location = (app: Express) => {
         async (req, res, next) => {
             try {
                 await getLocationByIdController(req, res);
+            } catch (error: any) {
+                next(error);
+            }
+        }
+    );
+
+    // get location with available cars route
+    app.route('/locations-cars/:id').get(
+        bothRoleAuth,
+        async (req, res, next) => {
+            try {
+                await getLocationWithCarsController(req, res);
             } catch (error: any) {
                 next(error);
             }
