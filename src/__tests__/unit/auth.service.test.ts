@@ -1,4 +1,3 @@
-// auth.service.test.ts
 import {
   createCustomerService,
   verifyCustomerService,
