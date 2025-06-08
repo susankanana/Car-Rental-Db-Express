@@ -3,9 +3,15 @@ import db from "../drizzle/db";
 import { TICar, CarTable } from "../drizzle/schema";
 
 
+// export const createCarService = async (car: TICar) => {
+//   await db.insert(CarTable).values(car).returning();
+//   return "Car added successfully";
+// };
+
 export const createCarService = async (car: TICar) => {
-  await db.insert(CarTable).values(car).returning();
-  return "Car added successfully";
+    const result = await db.insert(CarTable).values(car).returning();
+if (result.length === 0) return null;
+return "Car added successfully";
 };
 
 export const getCarService = async () => {

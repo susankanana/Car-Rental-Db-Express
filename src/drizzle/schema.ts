@@ -168,6 +168,11 @@ export const InsuranceRelations = relations(InsuranceTable, ({ one }) => ({
 // Types
 export type TICustomer = typeof CustomerTable.$inferInsert //TInsertCustomer
 export type TSCustomer = typeof CustomerTable.$inferSelect  //TSelectCustomer
+// New type specifically for the login service input
+export type TSCustomerLoginInput = {
+    email: string;
+    password: string;
+};
 export type TILocation = typeof LocationTable.$inferInsert
 export type TSLocation = typeof LocationTable.$inferSelect
 export type TICar = typeof CarTable.$inferInsert

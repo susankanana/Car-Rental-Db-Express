@@ -3,6 +3,7 @@ import { Request, Response } from 'express';
 import { createCustomerService,verifyCustomerService,customerLoginService,getCustomerWithBookingsAndPaymentsService,getAllCustomersWithBookingsAndPaymentsService,getCustomerService, getCustomerByIdService,getCustomerByEmailService, updateCustomerService, deleteCustomerService } from './auth.service';
 import jwt from 'jsonwebtoken';
 import { sendEmail } from "../mailer/mailer";
+import { TSCustomerLoginInput } from "../drizzle/schema";
 
 
 // create user controller
@@ -84,70 +85,131 @@ export const verifyCustomerController = async (req: Request, res: Response) => {
     }
 }
 
+// export const loginCustomerController = async (req: Request, res: Response) => {
+//     try {
+//         const customer= req.body;
+
+//         // check if customer exists
+//         const customerExist = await customerLoginService(customer);
+//         if (!customerExist) {
+//             return res.status(404).json({ message: "Customer not found" });
+//         }
+//         // verify password
+//         if (typeof customer.password !== 'string' || customer.password.length === 0) {
+//         return res.status(400).json({ message: "Password is required." });
+//         }
+        
+//         const userMatch = await bcrypt.compareSync(customer.password, customerExist.password as string)
+//         if (!userMatch) {
+//             return res.status(401).json({ message: "Invalid credentials" });
+//         }
+
+//         // create a payload for the JWT
+//         const payload = {
+//             sub: customerExist.customerID, //sub means subject, which is the customer ID - it helps identify the user
+//             user_id: customerExist.customerID,
+//             first_name: customerExist.firstName,
+//             last_name: customerExist.lastName,
+//             role: customerExist.role, // role of the user
+//             exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 3 // 3 days expiration
+
+//             // /1000 converts milliseconds to seconds
+//             // +60 - adds 60 seconds - this is for 1 minute
+//             // * 60 - adds 60 minutes- this is for 1 hour
+//             // * 24 - adds 24 hours - this is for 1 day
+//             // * 3 - adds 3 days - this is for 3 days
+
+//             // if i was to add it for 1hr, Date.now() / 1000 + 60 * 60
+//             // if i was to add it for 1 week, Date.now() / 1000 + 60 * 60 * 24 * 7
+//             // // if i was to add it for 1 month, Date.now() / 1000 + 60 * 60 * 24 * 30
+//             // adding it for a minute, Date.now() / 1000 + 60
+//             // adding for 30 seconds, Date.now() / 1000 + 30
+//         }
+
+//         // Generate JWT token
+//         const secret = process.env.JWT_SECRET as string;
+//         if (!secret) {
+//             throw new Error("JWT_SECRET is not defined in the environment variables");
+//         }
+//         const token = jwt.sign(payload, secret);
+
+//         // Return the token and user information
+//         return res.status(200).json({
+//             message: "Login Successfull",
+//             token,
+//             user: {
+//                 user_id: customerExist.customerID,
+//                 first_name: customerExist.firstName,
+//                 last_name: customerExist.lastName,
+//                 email: customerExist.email,
+//                 role: customerExist.role
+//             }
+//         })
+
+//     } catch (error: any) {
+//         return res.status(500).json({ error: error.message });
+//     }
+// }
+
 export const loginCustomerController = async (req: Request, res: Response) => {
     try {
-        const customer= req.body;
-        //const customer = req.body
+        const { email, password } = req.body as TSCustomerLoginInput; //ensures TypeScript knows that req.body *should* have email and password.
 
-        // check if customer exists
-        const customerExist = await customerLoginService(customer);
-        if (!customerExist) {
-            return res.status(404).json({ message: "Customer not found" });
+         if (!email || typeof email !== 'string' || email.trim() === '') {
+            return res.status(400).json({ message: "Email is required and must be a non-empty string." });
         }
-        // verify password
-        if (typeof customer.password !== 'string' || customer.password.length === 0) {
-        return res.status(400).json({ message: "Password is required." });
+        if (!password || typeof password !== 'string' || password.length === 0) {
+            return res.status(400).json({ message: "Password is required and must be a non-empty string." });
         }
         
-        const userMatch = await bcrypt.compareSync(customer.password, customerExist.password as string)
+        const customerExist = await customerLoginService({ email, password });
+
+        if (!customerExist) {
+            return res.status(401).json({ message: "Invalid credentials" });
+        }
+
+        const userMatch = await bcrypt.compare(password, customerExist.password as string);
+
         if (!userMatch) {
             return res.status(401).json({ message: "Invalid credentials" });
         }
 
-        // create a payload for the JWT
+        //Generate JWT Token
+        const secret = process.env.JWT_SECRET;
+
+        // Essential: Check if JWT_SECRET is defined
+        if (!secret) {
+            console.error("Critical Error: JWT_SECRET environment variable is not defined!");
+            return res.status(500).json({ message: "Server configuration error. Please try again later." });
+        }
+
+        // Create the JWT payload
         const payload = {
-            sub: customerExist.customerID, //sub means subject, which is the customer ID - it helps identify the user
+            sub: customerExist.customerID,
             user_id: customerExist.customerID,
             first_name: customerExist.firstName,
             last_name: customerExist.lastName,
-            role: customerExist.role, // role of the user
-            exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 3 // 3 days expiration
+            role: customerExist.role,
+            exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 3 // 3 days expiration in seconds
+        };
 
-            // /1000 converts milliseconds to seconds
-            // +60 - adds 60 seconds - this is for 1 minute
-            // * 60 - adds 60 minutes- this is for 1 hour
-            // * 24 - adds 24 hours - this is for 1 day
-            // * 3 - adds 3 days - this is for 3 days
-
-            // if i was to add it for 1hr, Date.now() / 1000 + 60 * 60
-            // if i was to add it for 1 week, Date.now() / 1000 + 60 * 60 * 24 * 7
-            // // if i was to add it for 1 month, Date.now() / 1000 + 60 * 60 * 24 * 30
-            // adding it for a minute, Date.now() / 1000 + 60
-            // adding for 30 seconds, Date.now() / 1000 + 30
-        }
-
-        // Generate JWT token
-        const secret = process.env.JWT_SECRET as string;
-        if (!secret) {
-            throw new Error("JWT_SECRET is not defined in the environment variables");
-        }
         const token = jwt.sign(payload, secret);
 
-        // Return the token and user information
         return res.status(200).json({
-            message: "Login Successfull",
+            message: "Login Successful",
             token,
-            user: {
+            user: { // Return necessary user info, but NEVER the password
                 user_id: customerExist.customerID,
                 first_name: customerExist.firstName,
                 last_name: customerExist.lastName,
                 email: customerExist.email,
                 role: customerExist.role
             }
-        })
+        });
 
     } catch (error: any) {
-        return res.status(500).json({ error: error.message });
+        console.error("Login Error:", error);
+        return res.status(500).json({ message: "An unexpected error occurred during login." });
     }
 }
 

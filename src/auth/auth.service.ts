@@ -1,7 +1,7 @@
 import { sql } from "drizzle-orm";
 import { eq } from "drizzle-orm";
 import db from "../drizzle/db";
-import { TICustomer, CustomerTable, TSCustomer } from "../drizzle/schema";
+import { TICustomer, CustomerTable, TSCustomer, TSCustomerLoginInput } from "../drizzle/schema";
 
 //register a customer
 export const createCustomerService = async (user: TICustomer) => {
@@ -15,8 +15,23 @@ export const verifyCustomerService = async (email: string) => {
         .where(sql`${CustomerTable.email} = ${email}`);
 }
 
-export const customerLoginService = async (customer: TSCustomer) => {
-    const { email } = customer; //extracts email property from customer
+// export const customerLoginService = async (customer: TSCustomer) => {
+//     const { email } = customer; //extracts email property from customer
+
+//     return await db.query.CustomerTable.findFirst({
+//         columns: {
+//             customerID: true,
+//             firstName: true,
+//             lastName: true,
+//             email: true,
+//             password: true,
+//             role: true
+//         }, where: sql`${CustomerTable.email} = ${email}`
+//     })
+// }
+
+export const customerLoginService = async (customerInput: TSCustomerLoginInput) => {
+    const { email } = customerInput;
 
     return await db.query.CustomerTable.findFirst({
         columns: {
@@ -26,8 +41,9 @@ export const customerLoginService = async (customer: TSCustomer) => {
             email: true,
             password: true,
             role: true
-        }, where: sql`${CustomerTable.email} = ${email}`
-    })
+        },
+        where: sql`${CustomerTable.email} = ${email}`
+    });
 }
 
 export const getCustomerWithBookingsAndPaymentsService = async (id: number) => {
