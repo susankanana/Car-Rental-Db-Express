@@ -3,8 +3,10 @@ import db from "../drizzle/db";
 import { TIPayment, PaymentTable } from "../drizzle/schema";
 
 export const createPaymentService = async (payment: TIPayment) => {
-  await db.insert(PaymentTable).values(payment).returning();
-  return "Payment added successfully";
+  // await db.insert(PaymentTable).values(payment).returning();
+  // return "Payment added successfully";
+  const [created] = await db.insert(PaymentTable).values(payment).returning();
+  return created; 
 };
 
 export const getPaymentService = async () => {

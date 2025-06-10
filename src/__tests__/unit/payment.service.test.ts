@@ -45,7 +45,7 @@ describe("Payment Service", () => {
 
       const result = await createPaymentService(payment);
       expect(db.insert).toHaveBeenCalledWith(PaymentTable);
-      expect(result).toBe("Payment added successfully");
+      expect(result).toEqual(payment);
     });
   });
 

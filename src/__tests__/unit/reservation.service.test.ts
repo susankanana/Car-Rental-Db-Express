@@ -46,7 +46,7 @@ describe("Reservation Service", () => {
 
       const result = await createReservationService(reservation);
       expect(db.insert).toHaveBeenCalledWith(ReservationTable);
-      expect(result).toBe("Reservation added successfully");
+      expect(result).toEqual(reservation);
     });
   });
 

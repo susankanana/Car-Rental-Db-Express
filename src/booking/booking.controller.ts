@@ -6,7 +6,10 @@ export const createBookingController = async (req: Request, res: Response) => {
     const booking = req.body;
     const created = await createBookingService(booking);
     if (!created) return res.json({ message: "Booking not created" });
-    return res.status(201).json({ message: created });
+    return res.status(201).json({
+       message: "Booking added successfully",
+       data: created, // created is now the full booking object
+});
   } catch (error: any) {
     return res.status(500).json({ error: error.message });
   }

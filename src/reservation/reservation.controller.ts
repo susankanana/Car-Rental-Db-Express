@@ -5,12 +5,15 @@ export const createReservationController = async (req: Request, res: Response) =
   try {
     const reservation = req.body;
     const created = await createReservationService(reservation);
-    if (!created) return res.json({ message: "Reservation not created" });
-    return res.status(201).json({ message: created });
+    if (!created) {
+      return res.status(400).json({ message: "Reservation could not be created" });
+    }
+    return res.status(201).json({ data: created, message: "Reservation created successfully" });
   } catch (error: any) {
     return res.status(500).json({ error: error.message });
   }
 };
+
 
 export const getReservationController = async (req: Request, res: Response) => {
   try {

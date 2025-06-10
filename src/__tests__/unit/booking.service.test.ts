@@ -43,7 +43,7 @@ describe("Booking Service", () => {
 
       const result = await createBookingService(booking);
       expect(db.insert).toHaveBeenCalledWith(BookingsTable);
-      expect(result).toBe("Booking added successfully");
+      expect(result).toEqual(booking);
     });
   });
 

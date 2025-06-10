@@ -4,8 +4,8 @@ import {createPaymentService,getPaymentService,getPaymentByIdService,getPayments
 export const registerPaymentController = async (req: Request, res: Response) => {
   try {
     const createPayment = await createPaymentService(req.body);
-    if (!createPayment) return res.json({ message: "Payment not created" });
-    return res.status(201).json({ message: createPayment });
+    if (!createPayment) return res.json({ message: "Payment not made" });
+    return res.status(201).json({ data: createPayment, message: "Payment made successfully" });
   } catch (error: any) {
     return res.status(500).json({ error: error.message });
   }
@@ -55,8 +55,13 @@ export const updatePaymentController = async (req: Request, res: Response) => {
     const id = parseInt(req.params.id);
     if (isNaN(id)) return res.status(400).json({ message: "Invalid ID" });
 
+    const existingPayment = await getPaymentByIdService(id);
+    if (!existingPayment) {
+      return res.status(404).json({ message: "Payment not found" }); 
+    }
+
     const updated = await updatePaymentService(id, req.body);
-    if (!updated) return res.status(400).json({ message: "Payment not updated" });
+    if (!updated) return res.status(400).json({ message: "Payment could not be updated" }); 
 
     return res.status(200).json({ message: "Payment updated successfully" });
   } catch (error: any) {

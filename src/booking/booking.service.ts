@@ -3,8 +3,8 @@ import db from "../drizzle/db";
 import { TIBooking, BookingsTable } from "../drizzle/schema";
 
 export const createBookingService = async (booking: TIBooking) => {
-  await db.insert(BookingsTable).values(booking).returning();
-  return "Booking added successfully";
+  const [created] = await db.insert(BookingsTable).values(booking).returning();
+  return created;
 };
 
 export const getBookingService = async () => {
