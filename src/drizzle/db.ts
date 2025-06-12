@@ -33,6 +33,6 @@ import * as schema from './schema';
 export const sql = neon(process.env.Database_URL!);
 
 // Initialize drizzle with the neon 'sql' instance
-const db = drizzle(sql, { schema, logger: true });
+const db = drizzle(sql, { schema, logger: false });
 
 export default db;
