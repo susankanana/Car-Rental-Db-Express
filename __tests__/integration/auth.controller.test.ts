@@ -18,6 +18,8 @@ const testCustomer = {
     isVerified: true
 };
 
+
+
 beforeAll(async () => {
      await db.delete(CustomerTable);
     const hashedPassword = bcrypt.hashSync(testCustomer.password, 10);

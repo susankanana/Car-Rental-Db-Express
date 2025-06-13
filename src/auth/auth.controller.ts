@@ -165,7 +165,7 @@ export const loginCustomerController = async (req: Request, res: Response) => {
         const customerExist = await customerLoginService({ email, password });
 
         if (!customerExist) {
-            return res.status(401).json({ message: "Invalid credentials" });
+            return res.status(404).json({ message: "User not found" });
         }
 
         const userMatch = await bcrypt.compare(password, customerExist.password as string);

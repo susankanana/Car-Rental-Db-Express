@@ -12,64 +12,63 @@ const testUser = {
     password: "regpass123"
 };
 
-beforeAll(async () =>{
-  await db.delete(CustomerTable);
+beforeAll(async () => {
+    
+    const hashedPassword = bcrypt.hashSync(testUser.password, 10)
+    await db.insert(CustomerTable).values({
+        ...testUser,
+        password: hashedPassword
+    })
 })
+
 afterAll(async () => {
-    // Clean up the test user
-
-    await db.delete(CustomerTable).where(eq(CustomerTable.email, testUser.email));
-    //await db.$client.end(); // Not necessary sinece when using Neon with HTTP, db object is based on NeonQueryFunction, not a traditional Client with .connect() or .end().
+   
+    await db.delete(CustomerTable).where(eq(CustomerTable.email, testUser.email))
+    //await db.$client.end()
 })
 
-
-describe("Post /auth/register", () => {
-    it("should register a new user successfully", async () => {
+describe("Post /auth/login", () => {
+    it("should authenticate a user and return a token", async () => {
         const res = await request(app)
-            .post("/auth/register")
-            // hash the password
+            .post("/auth/login")
             .send({
-                ...testUser,
-                password: bcrypt.hashSync(testUser.password, 10)
-            });
-        
-        expect(res.statusCode).toBe(201);
-        expect(res.body).toHaveProperty("message", "User created. Verification code sent to email.");
-    })
-
-    it("should not register a user with an existing email", async () => {
-        // register the user again
-        await request(app)
-            .post("/auth/register")
-            .send({
-                ...testUser,
-                password: bcrypt.hashSync(testUser.password, 10)
-            });
-
-        // try to register the same user again
-        const res = await request(app)
-            .post("/auth/register")
-            .send({
-                ...testUser,
-                password: bcrypt.hashSync(testUser.password, 10)
-            });
-
-        expect(res.statusCode).toBe(500);
-        expect(res.body).toHaveProperty("error")
-
-    })
-
-    it("should not register a user with missing fields", async () => {
-        const res = await request(app)
-            .post("/auth/register")
-            .send({
-                firstName: testUser.firstName,
-                lastName: testUser.lastName,
-                email: testUser.email
-                // missing password
+                email: testUser.email,
+                password: testUser.password
             })
 
-        expect(res.statusCode).toBe(500);
-        expect(res.body).toHaveProperty("error")
+        expect(res.statusCode).toBe(200)
+        expect(res.body).toHaveProperty("token")
+        expect(res.body.user).toEqual(
+            expect.objectContaining({
+                user_id: expect.any(Number),
+                first_name: testUser.firstName,
+                last_name: testUser.lastName,
+                email: testUser.email
+            })
+        )
+    })
+
+    it("should fail with wrong password", async () => {
+        const res = await request(app)
+            .post("/auth/login")
+            .send({
+                email: testUser.email,
+                password: "wrongpassword"
+            })
+
+        expect(res.statusCode).toBe(401)
+        expect(res.body).toEqual({ message: "Invalid credentials" })
+    })
+
+    it("should fail with non-existent user", async () => {
+        const res = await request(app)
+            .post("/auth/login")
+            .send({
+                email: "nouser@mail.com",
+                password: "irrelevant"
+            })
+
+        expect(res.statusCode).toBe(404)
+        expect(res.body).toEqual({ message: "User not found" })
     })
 })
