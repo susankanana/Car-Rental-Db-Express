@@ -59,7 +59,7 @@ const booking = (app: Express) => {
   );
 
   app.route("/booking/:id").delete(
-    adminRoleAuth,
+    bothRoleAuth,
     async (req, res, next) => {
       try {
         await deleteBookingController(req, res);

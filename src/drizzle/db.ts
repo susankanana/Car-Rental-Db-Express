@@ -28,11 +28,7 @@ import { neon } from '@neondatabase/serverless'; // Import neon client from its 
 import { drizzle } from 'drizzle-orm/neon-http'; // Import drizzle specifically for neon-http
 import * as schema from './schema';
 
-// Create the 'sql' instance using the neon client
-// The '!' tells TypeScript that process.env.Database_URL will not be undefined at runtime.
-export const sql = neon(process.env.Database_URL!);
+export const client = neon(process.env.Database_URL!)
 
-// Initialize drizzle with the neon 'sql' instance
-const db = drizzle(sql, { schema, logger: false });
-
+const db = drizzle(client, { schema, logger: false });
 export default db;

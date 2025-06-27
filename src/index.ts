@@ -40,11 +40,16 @@ import reservation from './reservation/reservation.router';
 import payment from './payment/payment.router';
 import insurance from './insurance/insurance.router';
 import maintenance from './maintenance/maintenance.router';
+import cors from 'cors';
 
 
 const initilizeApp = () => {
  const app = express();
  app.use(express.json()); //used to parse JSON bodies
+ app.use(cors({
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST", "PUT", "DELETE"]
+ }))
 
   // routes
  customer(app);

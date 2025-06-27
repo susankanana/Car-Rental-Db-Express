@@ -1,0 +1,1 @@
+ALTER TABLE "customer" ADD COLUMN "image_url" varchar(255) DEFAULT 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y';

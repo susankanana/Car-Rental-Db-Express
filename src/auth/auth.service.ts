@@ -40,7 +40,8 @@ export const customerLoginService = async (customerInput: TSCustomerLoginInput) 
             lastName: true,
             email: true,
             password: true,
-            role: true
+            role: true,
+            isVerified: true
         },
         where: sql`${CustomerTable.email} = ${email}`
     });

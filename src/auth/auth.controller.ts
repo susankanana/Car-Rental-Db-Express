@@ -190,6 +190,7 @@ export const loginCustomerController = async (req: Request, res: Response) => {
             first_name: customerExist.firstName,
             last_name: customerExist.lastName,
             role: customerExist.role,
+            isVerified: customerExist.isVerified,
             exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 3 // 3 days expiration in seconds
         };
 
@@ -203,7 +204,8 @@ export const loginCustomerController = async (req: Request, res: Response) => {
                 first_name: customerExist.firstName,
                 last_name: customerExist.lastName,
                 email: customerExist.email,
-                role: customerExist.role
+                role: customerExist.role,
+                isVerified: customerExist.isVerified
             }
         });
 

@@ -20,10 +20,10 @@ export const getBookingByIdService = async (id: number) => {
 };
 
 export const getBookingssByCustomerIdService = async (customerId: number) => {
-  const reservations = await db.query.ReservationTable.findMany({
+  const  bookings = await db.query.BookingsTable.findMany({
     where: eq(BookingsTable.customerID, customerId),
   });
-  return reservations;
+  return bookings;
 };
 
 export const updateBookingService = async (id: number, booking: TIBooking) => {
